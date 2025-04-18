@@ -1,0 +1,84 @@
+import 'package:easycut_business/core/class/status_request.dart';
+import 'package:easycut_business/core/constant/routes.dart';
+import 'package:easycut_business/core/functions/handling_data_controller.dart';
+import 'package:easycut_business/data/data_source/remote/forget_password/reset_password.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+abstract class ResetPasswordController extends GetxController {
+  resetPassword();
+}
+
+class ResetPasswordControllerImp extends ResetPasswordController {
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
+  String? email;
+  late TextEditingController password;
+  late TextEditingController confirmPassword;
+  ResetPasswordData resetPasswordData = ResetPasswordData(Get.find());
+  StatusRequest statusRequest = StatusRequest.success;
+
+  bool isShowPassword = true;
+
+  showPassword() {
+    isShowPassword = !isShowPassword;
+    update();
+  }
+
+  @override
+  resetPassword() async {
+    var formData = formState.currentState;
+    if (formData!.validate()) {
+      if (password.text == confirmPassword.text) {
+        statusRequest = StatusRequest.loading;
+        update();
+        var response = await resetPasswordData.postData(
+          email!,
+          password.text,
+        );
+        statusRequest = handlingData(response);
+        if (statusRequest == StatusRequest.success) {
+          if (response['status'] == 'success') {
+            Get.snackbar(
+              'Success',
+              'Password Change Successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.green,
+            );
+            Get.offAllNamed(AppRoute.success);
+          } else {
+            Get.snackbar(
+              'Warning',
+              'Something Happened when changing Password',
+              snackPosition: SnackPosition.TOP,
+              colorText: Colors.red,
+            );
+            statusRequest = StatusRequest.failure;
+          }
+        }
+        update();
+      } else {
+        Get.snackbar(
+          "Warning",
+          "New Password is not Equal to Confirm Password",
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+        );
+      }
+    } else {}
+  }
+
+  @override
+  void onInit() {
+    email = Get.arguments['email'];
+    password = TextEditingController();
+    confirmPassword = TextEditingController();
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    password.dispose();
+    confirmPassword.dispose();
+    super.dispose();
+  }
+}

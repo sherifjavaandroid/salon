@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372013397182",
+    "project_id": "easycutmain",
+    "storage_bucket": "easycutmain.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372013397182:android:11627ca052402aacb01aef",
+        "android_client_info": {
+          "package_name": "com.easycut.business.mainbrains"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKOJ7RDofhj-lgq5tj_dpXZz6kv6LJY-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
